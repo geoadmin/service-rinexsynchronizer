@@ -1,0 +1,11 @@
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\bin\Debug\System.Data.SQLite.dll
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\bin\Debug\System.Data.SQLite.xml
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\bin\Debug\System.Data.SQLite.dll.config
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\obj\Debug\service-rinexsynchronizer.csprojAssemblyReference.cache
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\obj\Debug\service-rinexsynchronizer.csproj.CoreCompileInputs.cache
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\obj\Debug\service-rinexsynchronizer.csproj.CopyComplete
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\bin\Debug\RinexSynchronizer.exe.config
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\bin\Debug\RinexSynchronizer.exe
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\bin\Debug\RinexSynchronizer.pdb
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\obj\Debug\RinexSynchronizer.exe
+C:\LegacySW\DEV\git-rss\service-rinexsynchronizer\service-rinexsynchronizer\obj\Debug\RinexSynchronizer.pdb
