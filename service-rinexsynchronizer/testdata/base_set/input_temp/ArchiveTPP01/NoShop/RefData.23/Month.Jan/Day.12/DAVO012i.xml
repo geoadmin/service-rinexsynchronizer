@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VectorObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../Models/RINEX/RINEX3.OBJ.XSD">
+  <GDSKey>RINEX</GDSKey>
+  <LayerKey>RINEX_STATIONS</LayerKey>
+  <TemporalKey>2019</TemporalKey>
+  <ReleaseKey>1</ReleaseKey>
+  <Version>1</Version>
+  <Status>valid</Status>
+  <StatusDate>2023-01-12T15:24:15</StatusDate>
+  <ImportDate />
+  <SourceReferenceSystem>CHLV95</SourceReferenceSystem>
+  <Commentary />
+  <Checksum Algorithmus="MD5" value="EAAA626EDF3E5CCE5F5FF629DD813E90" />
+  <RinexVersion>3.03</RinexVersion>
+  <RinexShortName>DAVO012i</RinexShortName>
+  <RinexLongName>DAVO00CHE_R_20230120804_01H_01S_MO</RinexLongName>
+  <Name>DAVO</Name>
+  <X>4309608.978</X>
+  <Y>747769.759</Y>
+  <Z>4628755.575</Z>
+  <Intervall value="1" unit="second" />
+  <FirstObservation>12/01/2023 08:04:57</FirstObservation>
+  <LastObservation>12/01/2023 08:59:59</LastObservation>
+  <NumberOfObservations>3303</NumberOfObservations>
+  <NumberOfSatellites>0</NumberOfSatellites>
+  <Observer>Trimble NetR9</Observer>
+  <ObserverType>TRIMBLE NETR9</ObserverType>
+  <ObserverNr>5424R48890</ObserverNr>
+  <ObserverFirmware>5.56</ObserverFirmware>
+  <GnssTimeSystem>Gps</GnssTimeSystem>
+  <AntennaType>TRM29659.00     NONE</AntennaType>
+  <AntennaNr>120900</AntennaNr>
+  <AntennaDeltaE>0</AntennaDeltaE>
+  <AntennaDeltaN>0</AntennaDeltaN>
+  <AntennaDeltaH>0</AntennaDeltaH>
+  <Agency>SWISSTOPO</Agency>
+  <SatelliteSystem>Mixed</SatelliteSystem>
+  <CreatorInfo>Receiver Operator</CreatorInfo>
+  <CreatorName>NetR9 5.56</CreatorName>
+  <CreationDateTime>12/01/2023 08:04:57</CreationDateTime>
+  <GpsObservationTypes>12</GpsObservationTypes>
+  <GloObservationTypes>0</GloObservationTypes>
+  <GalObservationTypes>0</GalObservationTypes>
+  <BdsObservationTypes>0</BdsObservationTypes>
+  <Checksum Algorithmus="SHA256" value="46884B68CCE0F870C5B6244440D166E3778B86F65510A8F6EBBA725E18FCC331" />
+  <IsShop>False</IsShop>
+</VectorObject>
