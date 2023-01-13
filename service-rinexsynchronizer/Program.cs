@@ -32,6 +32,7 @@ namespace RinexSynchronizer
         private static readonly string dataShareShopPath = ConfigurationManager.AppSettings["DataShareShopPath"];
         private static readonly string dataShareNPRPath = ConfigurationManager.AppSettings["DataShareNPRPath"];
         private static readonly string logFilesToCheck = ConfigurationManager.AppSettings["LogFilesToCheck"];
+        private static bool checkPreviousLogs = bool.Parse(ConfigurationManager.AppSettings["CheckPreviousLogs"] ?? "true");
 
         static void Main(string[] args)
         {
@@ -85,49 +86,57 @@ namespace RinexSynchronizer
 
         private static bool CheckIfReady()
         {
-            int count = 0;
-            string[] logFileToCheck = logFilesToCheck.Split(',');
-            if (File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5])))
+            if (!checkPreviousLogs)
             {
-                bool stayInWhile = false;
-                do
-                {
-                    bool statusDAFITPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0]));
-                    bool statusDAFITPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1]));
-                    bool statusNoShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2]));
-                    bool statusNoShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3]));
-                    bool statusShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4]));
-                    bool statusShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5]));
-                    if (statusDAFITPP01 && statusDAFITPP02 && statusNoShopTPP01 && statusNoShopTPP02 && statusShopTPP01 && statusShopTPP02)
-                    {
-                        stayInWhile = false;
-                    }
-                    else
-                    {
-                        stayInWhile = true;
-                        System.Threading.Thread.Sleep(10000);
-                    }
-                    count++;
-                } while (stayInWhile && count < 60);
-                if (count == 60)
-                {
-                    LogWriter.WriteToLog(string.Format("Timeout for processing! No synchronization done because previous process not ready."));
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                LogWriter.WriteToLog(string.Format("INFORMATION: check of previous process skipped!"));
+                return true;
             }
             else
             {
-                LogWriter.WriteToLog(string.Format("Not all logfiles for check exist! No synchronization done because previous process could not be checked."));
-                return false;
+                int count = 0;
+                string[] logFileToCheck = logFilesToCheck.Split(',');
+                if (File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5])))
+                {
+                    bool stayInWhile = false;
+                    do
+                    {
+                        bool statusDAFITPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0]));
+                        bool statusDAFITPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1]));
+                        bool statusNoShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2]));
+                        bool statusNoShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3]));
+                        bool statusShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4]));
+                        bool statusShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5]));
+                        if (statusDAFITPP01 && statusDAFITPP02 && statusNoShopTPP01 && statusNoShopTPP02 && statusShopTPP01 && statusShopTPP02)
+                        {
+                            stayInWhile = false;
+                        }
+                        else
+                        {
+                            stayInWhile = true;
+                            System.Threading.Thread.Sleep(10000);
+                        }
+                        count++;
+                    } while (stayInWhile && count < 60);
+                    if (count == 60)
+                    {
+                        LogWriter.WriteToLog(string.Format("Timeout for processing! No synchronization done because previous process not ready."));
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    LogWriter.WriteToLog(string.Format("Not all logfiles for check exist! No synchronization done because previous process could not be checked."));
+                    return false;
+                }
             }
         }
 
