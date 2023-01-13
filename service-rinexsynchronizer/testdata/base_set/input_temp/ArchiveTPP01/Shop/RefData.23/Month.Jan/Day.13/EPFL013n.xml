@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VectorObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" noNamespaceSchemaLocation="../../Models/RINEX/RINEX3.OBJ.XSD">
+  <GDSKey>RINEX</GDSKey>
+  <LayerKey>RINEX_STATIONS</LayerKey>
+  <TemporalKey>2019</TemporalKey>
+  <ReleaseKey>1</ReleaseKey>
+  <Version>1</Version>
+  <Status>valid</Status>
+  <StatusDate>2023-01-13T16:01:17</StatusDate>
+  <ImportDate />
+  <SourceReferenceSystem>CHLV95</SourceReferenceSystem>
+  <Commentary />
+  <Checksum Algorithmus="MD5" value="8894BB0B07D811A19C7848B49C264325" />
+  <RinexVersion>3.03</RinexVersion>
+  <RinexShortName>EPFL013n</RinexShortName>
+  <RinexLongName>EPFL00CHE_R_20230131300_01H_01S_MO</RinexLongName>
+  <Name>EPFL</Name>
+  <X>4367900.646</X>
+  <Y>502906.395</Y>
+  <Z>4605656.416</Z>
+  <Intervall value="1" unit="second" />
+  <FirstObservation>13.01.2023 13:00:00</FirstObservation>
+  <LastObservation>13.01.2023 13:59:59</LastObservation>
+  <NumberOfObservations>3600</NumberOfObservations>
+  <NumberOfSatellites>0</NumberOfSatellites>
+  <Observer>Trimble NetR9</Observer>
+  <ObserverType>TRIMBLE NETR9</ObserverType>
+  <ObserverNr>5428R49121</ObserverNr>
+  <ObserverFirmware>5.52</ObserverFirmware>
+  <GnssTimeSystem>Gps</GnssTimeSystem>
+  <AntennaType>TRM59800.00     NONE</AntennaType>
+  <AntennaNr>5406354913</AntennaNr>
+  <AntennaDeltaE>0</AntennaDeltaE>
+  <AntennaDeltaN>0</AntennaDeltaN>
+  <AntennaDeltaH>0</AntennaDeltaH>
+  <Agency>SWISSTOPO</Agency>
+  <SatelliteSystem>Mixed</SatelliteSystem>
+  <CreatorInfo>Receiver Operator</CreatorInfo>
+  <CreatorName>NetR9 5.52</CreatorName>
+  <CreationDateTime>13.01.2023 13:00:00</CreationDateTime>
+  <GpsObservationTypes>12</GpsObservationTypes>
+  <GloObservationTypes>15</GloObservationTypes>
+  <GalObservationTypes>12</GalObservationTypes>
+  <BdsObservationTypes>9</BdsObservationTypes>
+  <Checksum Algorithmus="SHA256" value="5CE2670F925E85FBBD406F62937D733123C611D00C64F2B48ACC6160F17DD5A9" />
+  <IsShop>True</IsShop>
+</VectorObject>

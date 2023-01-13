@@ -4,3 +4,4 @@ obj
 bin
 service-rinexsynchronizer/testdata/base_set/output_RinexArchive/
 service-rinexsynchronizer/testdata/base_set/output_shop_temp/
+*.swp
