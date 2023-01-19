@@ -32,6 +32,7 @@ namespace RinexSynchronizer
         private static readonly string dataShareShopPath = ConfigurationManager.AppSettings["DataShareShopPath"];
         private static readonly string dataShareNPRPath = ConfigurationManager.AppSettings["DataShareNPRPath"];
         private static readonly string logFilesToCheck = ConfigurationManager.AppSettings["LogFilesToCheck"];
+        private static bool checkPreviousLogs = bool.Parse(ConfigurationManager.AppSettings["CheckPreviousLogs"] ?? "true");
 
         static void Main(string[] args)
         {
@@ -85,49 +86,57 @@ namespace RinexSynchronizer
 
         private static bool CheckIfReady()
         {
-            int count = 0;
-            string[] logFileToCheck = logFilesToCheck.Split(',');
-            if (File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4])) &&
-                File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5])))
+            if (!checkPreviousLogs)
             {
-                bool stayInWhile = false;
-                do
-                {
-                    bool statusDAFITPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0]));
-                    bool statusDAFITPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1]));
-                    bool statusNoShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2]));
-                    bool statusNoShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3]));
-                    bool statusShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4]));
-                    bool statusShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5]));
-                    if (statusDAFITPP01 && statusDAFITPP02 && statusNoShopTPP01 && statusNoShopTPP02 && statusShopTPP01 && statusShopTPP02)
-                    {
-                        stayInWhile = false;
-                    }
-                    else
-                    {
-                        stayInWhile = true;
-                        System.Threading.Thread.Sleep(10000);
-                    }
-                    count++;
-                } while (stayInWhile && count < 60);
-                if (count == 60)
-                {
-                    LogWriter.WriteToLog(string.Format("Timeout for processing! No synchronization done because previous process not ready."));
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                LogWriter.WriteToLog(string.Format("INFORMATION: check of previous process skipped!"));
+                return true;
             }
             else
             {
-                LogWriter.WriteToLog(string.Format("Not all logfiles for check exist! No synchronization done because previous process could not be checked."));
-                return false;
+                int count = 0;
+                string[] logFileToCheck = logFilesToCheck.Split(',');
+                if (File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4])) &&
+                    File.Exists(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5])))
+                {
+                    bool stayInWhile = false;
+                    do
+                    {
+                        bool statusDAFITPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[0]));
+                        bool statusDAFITPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[1]));
+                        bool statusNoShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[2]));
+                        bool statusNoShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[3]));
+                        bool statusShopTPP01 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[4]));
+                        bool statusShopTPP02 = IsLogFileStatusOK(Path.Combine(ConfigurationManager.AppSettings["LogPathToCheck"], DateTime.Now.ToString("yyyy-MM-dd") + "_" + logFileToCheck[5]));
+                        if (statusDAFITPP01 && statusDAFITPP02 && statusNoShopTPP01 && statusNoShopTPP02 && statusShopTPP01 && statusShopTPP02)
+                        {
+                            stayInWhile = false;
+                        }
+                        else
+                        {
+                            stayInWhile = true;
+                            System.Threading.Thread.Sleep(10000);
+                        }
+                        count++;
+                    } while (stayInWhile && count < 60);
+                    if (count == 60)
+                    {
+                        LogWriter.WriteToLog(string.Format("Timeout for processing! No synchronization done because previous process not ready."));
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    LogWriter.WriteToLog(string.Format("Not all logfiles for check exist! No synchronization done because previous process could not be checked."));
+                    return false;
+                }
             }
         }
 
@@ -490,13 +499,18 @@ namespace RinexSynchronizer
 
                 FileInfo sourceXmlFile;
                 FileInfo sourceZipFile;
-                FileInfo sourceRnxFile;
+                FileInfo sourceNavFile;
                 FileInfo sourceCRXFile;
                 if (numberOfObservationsTPP01 >= numberOfObservationsTPP02)
                 {
                     sourceXmlFile = file;
                     sourceZipFile = new FileInfo(Path.ChangeExtension(file.FullName, "zip"));
-                    sourceRnxFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    if (!sourceNavFile.Exists)
+                    {
+                        string newRinexLongName = rinexLongName.Replace("_01S_", "_");
+                        sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", newRinexLongName.Remove(newRinexLongName.Length - 1, 1), "N.rnx")));
+                    }
                     sourceCRXFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "O.crx")));
                     dbH.loadDBRecord(xmlReaderTPP01.HeaderInfo);
                 }
@@ -504,13 +518,18 @@ namespace RinexSynchronizer
                 {
                     sourceXmlFile = new FileInfo(file.FullName.Replace(archivPathTPP01, archivPathTPP02));
                     sourceZipFile = new FileInfo(Path.ChangeExtension(sourceXmlFile.FullName, "zip"));
-                    sourceRnxFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    if (!sourceNavFile.Exists)
+                    {
+                        string newRinexLongName = rinexLongName.Replace("_01S_", "_");
+                        sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", newRinexLongName.Remove(newRinexLongName.Length - 1, 1), "N.rnx")));
+                    }
                     sourceCRXFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "O.crx")));
                     dbH.loadDBRecord(xmlReaderTPP02.HeaderInfo);
                 }
                 string xmlDataSharePath = Path.Combine(Path.Combine(Path.Combine(dataShareArchivePath, archivePathElement), dateTimePath), sourceXmlFile.Name);
                 string zipDataSharePath = Path.Combine(Path.Combine(Path.Combine(dataShareArchivePath, archivePathElement), dateTimePath), sourceZipFile.Name);
-                string rnxDataSharePath = Path.Combine(dateDataShareShopPath, sourceRnxFile.Name);
+                string navDataSharePath = Path.Combine(dateDataShareShopPath, sourceNavFile.Name);
                 string crxDataSharePath = Path.Combine(dateDataShareShopPath, sourceCRXFile.Name);
                 if (!sourceXmlFile.Exists || !sourceZipFile.Exists)
                 {
@@ -520,10 +539,14 @@ namespace RinexSynchronizer
                 {
                     sourceXmlFile.CopyTo(xmlDataSharePath, true);
                     sourceZipFile.CopyTo(zipDataSharePath, true);
-                    if (archivePathElement.Equals("Shop") && sourceRnxFile.Exists && sourceCRXFile.Exists)
+                    if (archivePathElement.Equals("Shop") && sourceNavFile.Exists && sourceCRXFile.Exists)
                     {
-                        sourceRnxFile.CopyTo(rnxDataSharePath, true);
+                        sourceNavFile.CopyTo(navDataSharePath, true);
                         sourceCRXFile.CopyTo(crxDataSharePath, true);
+                    }
+                    else
+                    {
+                        LogWriter.WriteToLog(string.Format("Warning: Sourcefiles {0} or {1} do not exists!! Can't copy files.", sourceNavFile.FullName, sourceCRXFile.FullName));
                     }
                     countFiles++;
                 }
