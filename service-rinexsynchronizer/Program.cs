@@ -539,14 +539,17 @@ namespace RinexSynchronizer
                 {
                     sourceXmlFile.CopyTo(xmlDataSharePath, true);
                     sourceZipFile.CopyTo(zipDataSharePath, true);
-                    if (archivePathElement.Equals("Shop") && sourceNavFile.Exists && sourceCRXFile.Exists)
+                    if (archivePathElement.Equals("Shop"))
                     {
-                        sourceNavFile.CopyTo(navDataSharePath, true);
-                        sourceCRXFile.CopyTo(crxDataSharePath, true);
-                    }
-                    else
-                    {
-                        LogWriter.WriteToLog(string.Format("Warning: Sourcefiles {0} or {1} do not exists!! Can't copy files.", sourceNavFile.FullName, sourceCRXFile.FullName));
+                        if (sourceNavFile.Exists && sourceCRXFile.Exists)
+                        {
+                            sourceNavFile.CopyTo(navDataSharePath, true);
+                            sourceCRXFile.CopyTo(crxDataSharePath, true);
+                        }
+                        else
+                        {
+                            LogWriter.WriteToLog(string.Format("Warning: Sourcefiles {0} or {1} do not exists!! Can't copy files.", sourceNavFile.FullName, sourceCRXFile.FullName));
+                        }
                     }
                     countFiles++;
                 }
