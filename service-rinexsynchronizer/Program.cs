@@ -499,13 +499,18 @@ namespace RinexSynchronizer
 
                 FileInfo sourceXmlFile;
                 FileInfo sourceZipFile;
-                FileInfo sourceRnxFile;
+                FileInfo sourceNavFile;
                 FileInfo sourceCRXFile;
                 if (numberOfObservationsTPP01 >= numberOfObservationsTPP02)
                 {
                     sourceXmlFile = file;
                     sourceZipFile = new FileInfo(Path.ChangeExtension(file.FullName, "zip"));
-                    sourceRnxFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    if (!sourceNavFile.Exists)
+                    {
+                        string newRinexLongName = rinexLongName.Replace("_01S_", "_");
+                        sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", newRinexLongName.Remove(newRinexLongName.Length - 1, 1), "N.rnx")));
+                    }
                     sourceCRXFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP01, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "O.crx")));
                     dbH.loadDBRecord(xmlReaderTPP01.HeaderInfo);
                 }
@@ -513,13 +518,18 @@ namespace RinexSynchronizer
                 {
                     sourceXmlFile = new FileInfo(file.FullName.Replace(archivPathTPP01, archivPathTPP02));
                     sourceZipFile = new FileInfo(Path.ChangeExtension(sourceXmlFile.FullName, "zip"));
-                    sourceRnxFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "N.rnx")));
+                    if (!sourceNavFile.Exists)
+                    {
+                        string newRinexLongName = rinexLongName.Replace("_01S_", "_");
+                        sourceNavFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", newRinexLongName.Remove(newRinexLongName.Length - 1, 1), "N.rnx")));
+                    }
                     sourceCRXFile = new FileInfo(Path.Combine(Path.Combine(shopPathTPP02, dateTimePath), string.Format("{0}{1}", rinexLongName.Remove(rinexLongName.Length - 1, 1), "O.crx")));
                     dbH.loadDBRecord(xmlReaderTPP02.HeaderInfo);
                 }
                 string xmlDataSharePath = Path.Combine(Path.Combine(Path.Combine(dataShareArchivePath, archivePathElement), dateTimePath), sourceXmlFile.Name);
                 string zipDataSharePath = Path.Combine(Path.Combine(Path.Combine(dataShareArchivePath, archivePathElement), dateTimePath), sourceZipFile.Name);
-                string rnxDataSharePath = Path.Combine(dateDataShareShopPath, sourceRnxFile.Name);
+                string navDataSharePath = Path.Combine(dateDataShareShopPath, sourceNavFile.Name);
                 string crxDataSharePath = Path.Combine(dateDataShareShopPath, sourceCRXFile.Name);
                 if (!sourceXmlFile.Exists || !sourceZipFile.Exists)
                 {
@@ -529,10 +539,14 @@ namespace RinexSynchronizer
                 {
                     sourceXmlFile.CopyTo(xmlDataSharePath, true);
                     sourceZipFile.CopyTo(zipDataSharePath, true);
-                    if (archivePathElement.Equals("Shop") && sourceRnxFile.Exists && sourceCRXFile.Exists)
+                    if (archivePathElement.Equals("Shop") && sourceNavFile.Exists && sourceCRXFile.Exists)
                     {
-                        sourceRnxFile.CopyTo(rnxDataSharePath, true);
+                        sourceNavFile.CopyTo(navDataSharePath, true);
                         sourceCRXFile.CopyTo(crxDataSharePath, true);
+                    }
+                    else
+                    {
+                        LogWriter.WriteToLog(string.Format("Warning: Sourcefiles {0} or {1} do not exists!! Can't copy files.", sourceNavFile.FullName, sourceCRXFile.FullName));
                     }
                     countFiles++;
                 }
